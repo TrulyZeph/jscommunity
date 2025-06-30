@@ -192,6 +192,191 @@ function showProfilePanel(profile) {
   document.body.appendChild(panel);
 }
 
+function createProfileUploadButton(onProfileAdd) {
+  const uploadBtn = document.createElement('button');
+  uploadBtn.textContent = 'Add Yourself';
+  uploadBtn.style.position = 'fixed';
+  uploadBtn.style.bottom = '32px';
+  uploadBtn.style.right = '32px';
+  uploadBtn.style.zIndex = '100002';
+  uploadBtn.style.fontFamily = 'Poppins, sans-serif';
+  uploadBtn.style.fontSize = '1.1em';
+  uploadBtn.style.padding = '12px 28px';
+  uploadBtn.style.background = '#01AEFD';
+  uploadBtn.style.color = '#fff';
+  uploadBtn.style.border = 'none';
+  uploadBtn.style.borderRadius = '12px';
+  uploadBtn.style.cursor = 'pointer';
+  document.body.appendChild(uploadBtn);
+
+  uploadBtn.onclick = () => {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'rgba(0,0,0,0.7)';
+    overlay.style.zIndex = '100003';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+
+    const form = document.createElement('div');
+    form.style.background = '#232323';
+    form.style.borderRadius = '18px';
+    form.style.padding = '36px 32px 28px 32px';
+    form.style.display = 'flex';
+    form.style.flexDirection = 'column';
+    form.style.alignItems = 'center';
+    form.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
+    form.style.minWidth = '320px';
+    form.style.fontFamily = 'Poppins, sans-serif';
+
+    const title = document.createElement('div');
+    title.textContent = 'Add Yourself';
+    title.style.fontSize = '1.5em';
+    title.style.color = '#01AEFD';
+    title.style.marginBottom = '18px';
+    form.appendChild(title);
+
+    const nameInput = document.createElement('input');
+    nameInput.placeholder = 'Your Name';
+    nameInput.style.fontSize = '1.1em';
+    nameInput.style.marginBottom = '12px';
+    nameInput.style.padding = '8px 12px';
+    nameInput.style.borderRadius = '8px';
+    nameInput.style.border = '1px solid #444';
+    nameInput.style.width = '100%';
+    nameInput.style.boxSizing = 'border-box';
+    nameInput.style.background = '#f2f4f8';
+    nameInput.style.color = '#015AFD';
+    form.appendChild(nameInput);
+
+    const descInput = document.createElement('textarea');
+    descInput.placeholder = 'Short Description';
+    descInput.style.fontSize = '1.1em';
+    descInput.style.marginBottom = '12px';
+    descInput.style.padding = '8px 12px';
+    descInput.style.borderRadius = '8px';
+    descInput.style.border = '1px solid #444';
+    descInput.style.width = '100%';
+    descInput.style.boxSizing = 'border-box';
+    descInput.style.minHeight = '60px';
+    descInput.style.background = '#f2f4f8';
+    descInput.style.color = '#015AFD';
+    form.appendChild(descInput);
+
+    const imgInput = document.createElement('input');
+    imgInput.type = 'text';
+    imgInput.placeholder = 'Image Link (or choose file below)';
+    imgInput.style.fontSize = '1.1em';
+    imgInput.style.marginBottom = '8px';
+    imgInput.style.padding = '8px 12px';
+    imgInput.style.borderRadius = '8px';
+    imgInput.style.border = '1px solid #444';
+    imgInput.style.width = '100%';
+    imgInput.style.boxSizing = 'border-box';
+    imgInput.style.background = '#f2f4f8';
+    imgInput.style.color = '#015AFD';
+    form.appendChild(imgInput);
+
+    // Custom upload button
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+    const fileLabel = document.createElement('label');
+    fileLabel.textContent = 'Choose Image File';
+    fileLabel.style.display = 'inline-block';
+    fileLabel.style.background = 'linear-gradient(to bottom, #01AEFD, #015AFD)';
+    fileLabel.style.color = '#fff';
+    fileLabel.style.fontWeight = 'bold';
+    fileLabel.style.fontSize = '1.05em';
+    fileLabel.style.padding = '10px 24px';
+    fileLabel.style.borderRadius = '8px';
+    fileLabel.style.cursor = 'pointer';
+    fileLabel.style.marginBottom = '16px';
+    fileLabel.style.marginTop = '2px';
+    fileLabel.htmlFor = 'profile-upload-file';
+    fileInput.id = 'profile-upload-file';
+    form.appendChild(fileInput);
+    form.appendChild(fileLabel);
+
+    fileLabel.onclick = () => fileInput.click();
+    fileInput.onchange = () => {
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          imgInput.value = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    };
+
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = 'Add';
+    submitBtn.style.fontSize = '1.1em';
+    submitBtn.style.padding = '10px 28px';
+    submitBtn.style.background = '#01AEFD';
+    submitBtn.style.color = '#fff';
+    submitBtn.style.border = 'none';
+    submitBtn.style.borderRadius = '8px';
+    submitBtn.style.cursor = 'pointer';
+    submitBtn.style.marginTop = '8px';
+    form.appendChild(submitBtn);
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.style.fontSize = '1.1em';
+    cancelBtn.style.padding = '10px 28px';
+    cancelBtn.style.background = '#444';
+    cancelBtn.style.color = '#fff';
+    cancelBtn.style.border = 'none';
+    cancelBtn.style.borderRadius = '8px';
+    cancelBtn.style.cursor = 'pointer';
+    cancelBtn.style.marginTop = '8px';
+    cancelBtn.style.marginLeft = '8px';
+    form.appendChild(cancelBtn);
+
+    const buttonRow = document.createElement('div');
+    buttonRow.style.display = 'flex';
+    buttonRow.style.justifyContent = 'space-between';
+    buttonRow.style.width = '100%';
+    buttonRow.style.marginTop = '18px';
+
+    submitBtn.style.marginTop = '0';
+    submitBtn.style.marginLeft = '0';
+    submitBtn.style.marginRight = 'auto';
+    submitBtn.style.alignSelf = 'flex-start';
+    cancelBtn.style.marginTop = '0';
+    cancelBtn.style.marginLeft = 'auto';
+    cancelBtn.style.marginRight = '0';
+    cancelBtn.style.alignSelf = 'flex-end';
+
+    buttonRow.appendChild(submitBtn);
+    buttonRow.appendChild(cancelBtn);
+    form.appendChild(buttonRow);
+
+    cancelBtn.onclick = () => overlay.remove();
+
+    submitBtn.onclick = () => {
+      const name = nameInput.value.trim();
+      const desc = descInput.value.trim();
+      const img = imgInput.value.trim();
+      if (!name || !desc || !img) {
+        alert('Please fill out all fields and provide an image.');
+        return;
+      }
+      onProfileAdd({ name, desc, img });
+      overlay.remove();
+    };
+
+    overlay.appendChild(form);
+    document.body.appendChild(overlay);
+  };
+}
+
 const profiles = [
   { img: 'https://cdn.discordapp.com/avatars/1126277279568367698/74d284282b825336027f80dab2a5ecf7.png?size=4096', name: 'Zeph', desc: 'i made ts so thats cool ig' },
   { img: 'https://cdn.discordapp.com/avatars/366203114962812930/630edffda445f985fcf7d6da8a9c9604.png?size=4096', name: 'Remote', desc: 'remote is probably autistic' },
@@ -205,6 +390,30 @@ const profiles = [
   { img: 'https://cdn.discordapp.com/avatars/1119296560468066404/b9e183255ddee74ed8e5dac8b2e146a3.png?size=4096', name: 'Justin', desc: 'N/A' },
   {img: 'https://cdn.discordapp.com/guilds/1176637372721545316/users/529669497938903051/avatars/a_1b79bccfdc3d5629267bf6fb8094f171.gif?size=4096', name: 'DKR', desc: 'Guts is life' },
 ];
+
+async function fetchProfiles() {
+  const res = await fetch('/.netlify/functions/get-profiles');
+  return await res.json();
+}
+
+async function addProfile(profile) {
+  const res = await fetch('/.netlify/functions/add-profile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(profile)
+  });
+  return await res.json();
+}
+
+fetchProfiles().then(profiles => {
+  createProfileGrid(profiles);
+});
+
+createProfileUploadButton(async profile => {
+  await addProfile(profile);
+  const profiles = await fetchProfiles();
+  createProfileGrid(profiles);
+});
 
 createRepeatingTextBackground();
 createProfileGrid(profiles);
