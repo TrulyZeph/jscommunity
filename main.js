@@ -396,7 +396,11 @@ fetchProfiles().then(profiles => {
 });
 
 createProfileUploadButton(async profile => {
-  await addProfile(profile);
+  const result = await addProfile(profile);
+  if (!result || result.error) {
+    alert('Failed to add profile. Please try again.');
+    return;
+  }
   const profiles = await fetchProfiles();
   createProfileGrid(profiles);
 });
