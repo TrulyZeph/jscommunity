@@ -1,11 +1,7 @@
 function createRepeatingTextBackground() {
-  if (!document.getElementById('Fredoka-font-link')) {
-    const link = document.createElement('link');
-    link.id = 'Fredoka-font-link';
-    link.rel = 'stylesheet';
-    link.href = 'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap';
-    document.head.appendChild(link);
-  }
+
+  document.title = 'Jump Stars Community';
+
   const oldBg = document.getElementById('repeating-text-bg');
   if (oldBg) oldBg.remove();
   const bg = document.createElement('div');
@@ -160,12 +156,14 @@ const profiles = [
   { img: 'https://cdn.discordapp.com/avatars/387335054206173184/272dd49f7692df610b668b13c47d1337.png?size=4096', name: 'Zoinkys', desc: 'N/A' },
   { img: 'https://cdn.discordapp.com/avatars/594191661597327375/60f2145c98584eada12ff522e3800fea.png?size=4096', name: 'SenterSych', desc: '"im the goat"' },
   { img: 'https://cdn.discordapp.com/avatars/1119296560468066404/b9e183255ddee74ed8e5dac8b2e146a3.png?size=4096', name: 'Justin', desc: 'Never underestimate the Uchiha' },
-    {img: 'https://images-ext-1.discordapp.net/external/mu2O2UUb-4XueO4y3I6MmdvuOdrs2jlUqg0MkzMWQZo/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/529669497938903051/785fa087f01174e6034aca2f4c2152b2.png?format=webp&quality=lossless&width=810&height=810', name: 'DKR', desc: 'Guts is life' },
+  {img: 'https://images-ext-1.discordapp.net/external/mu2O2UUb-4XueO4y3I6MmdvuOdrs2jlUqg0MkzMWQZo/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/529669497938903051/785fa087f01174e6034aca2f4c2152b2.png?format=webp&quality=lossless&width=810&height=810', name: 'DKR', desc: 'Guts is life' },
   {img: 'https://images-ext-1.discordapp.net/external/_o_S9vh_5KGFF0fnPrFs6pbCF50b0-AvKa8ZlmV2WOc/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1298099597268221965/78146a3983d1889bb209008e9bab5ace.png?format=webp&quality=lossless&width=563&height=563', name: 'Toe Enthusiast', desc: 'I like chicken toes' },
   {img: 'https://images-ext-1.discordapp.net/external/HrS55dJEIwC2FD6YgsLgeW4TzeWOAA7dGfb5xnP8ZMI/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1195914102611120179/68e12f46d4cce9ade42929ef9e9409d4.png?format=webp&quality=lossless&width=223&height=223', name: 'Ball', desc: 'Look at my concepts.' },
   {img: 'https://images-ext-1.discordapp.net/external/Eb9wXrRzZASiq4OIZnVAGrDLDitxxBy8i1-YDhp6r5s/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1322309830308007976/f4a7019e4eab272382652b283df63929.png?format=webp&quality=lossless&width=282&height=282', name: 'MeTa', desc: 'You can’t beat MeTA' },
   {img: 'https://images-ext-1.discordapp.net/external/8epQOkPyrzf2cHXQFvruSRHn60oHMHfT3Tr1t8hyxw0/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/945234689768189983/a_3bf76ed8c109e5d45360ada42e35a5e2.gif?width=953&height=953', name: 'FentDealer', desc: "My name is fentdealer I'm driving a Mercedes benz" },
   {img: 'https://images-ext-1.discordapp.net/external/eLtu-AY1mlgTp9Asr2gWUbm8tKMh0jfb4ZRWVIgZD0Q/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1197970215326199881/ecae35402353750bf0d820c03f0fb2bc.png?format=webp&quality=lossless&width=282&height=282', name: 'Bonkey1', desc: 'cause bread tastes better than key.' },
+  {img: 'https://images-ext-1.discordapp.net/external/CS_mEdm5BxDzrNMgkMATtYcDGk_N0hHpCmFJkttqbB4/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/534213395629604895/bd8f398054de66eea9d3e7b4a5d1097e.png?format=webp&quality=lossless&width=718&height=718', name: 'MonkeyEd', desc: 'ANGRY BIRDS TRANSFORMERS TOURNAMENT CHAMPION' },
+  {img: 'https://images-ext-1.discordapp.net/external/qXmyF4ImLqD-_We6iPtSaXbD7XDvNSSYL6lWK7WQuW8/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/704365516130746458/dbcc7873b4a67e5540864711e0ea7430.png?format=webp&quality=lossless&width=396&height=396', name: 'i am you', desc: 'i hope you feel less motivated after reading this' },
 ];
 
 // --- Config ---
@@ -181,36 +179,56 @@ function formatCoins(num) {
   if (num < 1_000) return num.toString();
   if (num < 1_000_000) return num.toLocaleString();
   const units = [
-    { value: 1e93, symbol: "Dcvg" },
-    { value: 1e90, symbol: "Novg" },
-    { value: 1e87, symbol: "Ocvg" },
-    { value: 1e84, symbol: "Spvg" },
-    { value: 1e81, symbol: "Sxvg" },
-    { value: 1e78, symbol: "Qxvg" },
-    { value: 1e75, symbol: "Qavg" },
-    { value: 1e72, symbol: "Tvg" },
-    { value: 1e69, symbol: "Dvg" },
-    { value: 1e66, symbol: "Uvg" },
-    { value: 1e63, symbol: "Vg" },
-    { value: 1e60, symbol: "Nod" },
-    { value: 1e57, symbol: "Ocd" },
-    { value: 1e54, symbol: "Spd" },
-    { value: 1e51, symbol: "Sxd" },
-    { value: 1e48, symbol: "Qid" },
-    { value: 1e45, symbol: "Qad" },
-    { value: 1e42, symbol: "Td" },
-    { value: 1e39, symbol: "Dd" },
-    { value: 1e36, symbol: "Ud" },
-    { value: 1e33, symbol: "Dc" },
-    { value: 1e30, symbol: "No" },
-    { value: 1e27, symbol: "Oc" },
-    { value: 1e24, symbol: "Sp" },
-    { value: 1e21, symbol: "Sx" },
-    { value: 1e18, symbol: "Qi" },
-    { value: 1e15, symbol: "Qa" },
-    { value: 1e12, symbol: "T" },
-    { value: 1e9, symbol: "B" },
-    { value: 1e6, symbol: "M" }
+  { value: 1e6, symbol: "M" },
+  { value: 1e9, symbol: "B" },
+  { value: 1e12, symbol: "T" },
+  { value: 1e15, symbol: "Qa" },
+  { value: 1e18, symbol: "Qi" },
+  { value: 1e21, symbol: "Sx" },
+  { value: 1e24, symbol: "Sp" },
+  { value: 1e27, symbol: "Oc" },
+  { value: 1e30, symbol: "No" },
+  { value: 1e33, symbol: "Dc" },
+  { value: 1e36, symbol: "Ud" },
+  { value: 1e39, symbol: "Dd" },
+  { value: 1e42, symbol: "Td" },
+  { value: 1e45, symbol: "Qad" },
+  { value: 1e48, symbol: "Qid" },
+  { value: 1e51, symbol: "Sxd" },
+  { value: 1e54, symbol: "Spd" },
+  { value: 1e57, symbol: "Ocd" },
+  { value: 1e60, symbol: "Nod" },
+  { value: 1e63, symbol: "Vg" },
+  { value: 1e66, symbol: "Uvg" },
+  { value: 1e69, symbol: "Dvg" },
+  { value: 1e72, symbol: "Tvg" },
+  { value: 1e75, symbol: "Qavg" },
+  { value: 1e78, symbol: "Qxvg" },
+  { value: 1e81, symbol: "Sxvg" },
+  { value: 1e84, symbol: "Spvg" },
+  { value: 1e87, symbol: "Ocvg" },
+  { value: 1e90, symbol: "Novg" },
+  { value: 1e93, symbol: "Dcvg" },
+  { value: 1e96, symbol: "Udvg" },
+  { value: 1e99, symbol: "Ddvg" },
+  { value: 1e102, symbol: "Tdvg" },
+  { value: 1e105, symbol: "Qadvg" },
+  { value: 1e108, symbol: "Qidvg" },
+  { value: 1e111, symbol: "Sxdvg" },
+  { value: 1e114, symbol: "Spdvg" },
+  { value: 1e117, symbol: "Ocdvg" },
+  { value: 1e120, symbol: "Nodvg" },
+  { value: 1e123, symbol: "Vgvg" },
+  { value: 1e126, symbol: "Uvgvg" },
+  { value: 1e129, symbol: "Dvgvg" },
+  { value: 1e132, symbol: "Tvgvg" },
+  { value: 1e135, symbol: "Qavgvg" },
+  { value: 1e138, symbol: "Qxvgvg" },
+  { value: 1e141, symbol: "Sxvgvg" },
+  { value: 1e144, symbol: "Spvgvg" },
+  { value: 1e147, symbol: "Ocvgvg" },
+  { value: 1e150, symbol: "Novgvg" },
+  { value: 1e153, symbol: "Dcvgvg" },
   ];
   for (let i = 0; i < units.length; i++) {
     if (num >= units[i].value) {
@@ -319,11 +337,11 @@ let purchasedUpgrades = {
   "Faster Auto": false
 };
 let autoClickerLevel = 0;
-let autoClickerCost = 100;
+let autoClickerCost = 50;
 let doubleClickLevel = 0;
-let doubleClickCost = 50;
+let doubleClickCost = 150;
 let tripleClickLevel = 0;
-let tripleClickCost = 250;
+let tripleClickCost = 1000;
 
 function getAutoClickerGain(level) {
   if (level < 10) return 10;
@@ -527,7 +545,7 @@ function renderShopSidebar(section) {
         doubleClickLevel++;
         coinsPerClick *= 2;
         multiplier = coinsPerClick;
-        doubleClickCost = Math.round(doubleClickCost * 1.7);
+        doubleClickCost = Math.round(doubleClickCost * 2.5);
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
@@ -543,7 +561,7 @@ function renderShopSidebar(section) {
         doubleClickLevel++;
         coinsPerClick *= 2;
         multiplier = coinsPerClick;
-        doubleClickCost = Math.round(doubleClickCost * 1.7);
+        doubleClickCost = Math.round(doubleClickCost * 2);
         bought++;
       }
       if (bought > 0) {
@@ -576,7 +594,7 @@ function renderShopSidebar(section) {
     tripleClickCard.appendChild(tripleName);
 
     const tripleDesc = document.createElement('div');
-    tripleDesc.textContent = `Increase coins per click by 1.5x.`;
+    tripleDesc.textContent = `Increase coins per click by 3x.`;
     tripleDesc.style.fontSize = '0.98em';
     tripleDesc.style.color = '#bbb';
     tripleDesc.style.margin = '6px 0 12px 0';
@@ -599,9 +617,9 @@ function renderShopSidebar(section) {
       if (coins >= tripleClickCost) {
         coins -= tripleClickCost;
         tripleClickLevel++;
-        coinsPerClick = Math.round(coinsPerClick * 1.5);
+        coinsPerClick = Math.round(coinsPerClick * 3);
         multiplier = coinsPerClick;
-        tripleClickCost = Math.round(tripleClickCost * 1.7);
+        tripleClickCost = Math.round(tripleClickCost * 2.5);
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
@@ -615,9 +633,9 @@ function renderShopSidebar(section) {
       while (coins >= tripleClickCost) {
         coins -= tripleClickCost;
         tripleClickLevel++;
-        coinsPerClick = Math.round(coinsPerClick * 1.5);
+        coinsPerClick = Math.round(coinsPerClick * 3);
         multiplier = coinsPerClick;
-        tripleClickCost = Math.round(tripleClickCost * 1.7);
+        tripleClickCost = Math.round(tripleClickCost * 2.5);
         bought++;
       }
       if (bought > 0) {
