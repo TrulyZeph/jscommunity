@@ -1410,7 +1410,7 @@ function renderSection(section) {
     }
 
     const summon1 = document.createElement('button');
-    summon1.textContent = 'Summon 1x (500 coins)';
+    summon1.textContent = 'Summon 1x (100K coins)';
     summon1.style.fontSize = '1.1em';
     summon1.style.fontFamily = 'Fredoka, sans-serif';
     summon1.style.padding = '12px 32px';
