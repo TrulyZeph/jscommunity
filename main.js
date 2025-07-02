@@ -1,6 +1,6 @@
-function createRepeatingTextBackground() {
+document.title = 'Jump Stars Community';
 
-  document.title = 'Jump Stars Community';
+function createRepeatingTextBackground() {
 
   const oldBg = document.getElementById('repeating-text-bg');
   if (oldBg) oldBg.remove();
@@ -18,7 +18,7 @@ function createRepeatingTextBackground() {
   bg.style.justifyContent = 'center';
   bg.style.alignItems = 'center';
 
-  const text = 'JUMP STARS COMMUNITY';
+  const text = 'JUMP STARS COMMUNITY FAME';
   for (let i = 0; i < Math.floor(window.innerHeight / 32); i++) {
     const line = document.createElement('div');
     line.textContent = text + '    ' + text;
@@ -142,6 +142,34 @@ function showProfilePanel(profile) {
   desc.style.maxWidth = '420px';
   panel.appendChild(desc);
 
+  const boostsDiv = document.createElement('div');
+  boostsDiv.style.display = 'flex';
+  boostsDiv.style.justifyContent = 'center';
+  boostsDiv.style.gap = '18px';
+  boostsDiv.style.marginTop = '12px';
+
+  if (profile.buffs && profile.buffs.money && profile.buffs.money > 1) {
+    const moneyBoost = document.createElement('div');
+    moneyBoost.textContent = `Money Boost: x${profile.buffs.money}`;
+    moneyBoost.style.color = '#4eff4e';
+    moneyBoost.style.fontWeight = 'bold';
+    moneyBoost.style.fontFamily = 'Fredoka, sans-serif';
+    boostsDiv.appendChild(moneyBoost);
+  }
+
+  if (profile.buffs && profile.buffs.luck && profile.buffs.luck > 1) {
+    const luckBoost = document.createElement('div');
+    luckBoost.textContent = `Luck Boost: x${profile.buffs.luck}`;
+    luckBoost.style.color = '#ff4e4e';
+    luckBoost.style.fontFamily = 'Fredoka, sans-serif';
+    luckBoost.style.fontWeight = 'bold';
+    boostsDiv.appendChild(luckBoost);
+  }
+
+  if (boostsDiv.children.length > 0) {
+    panel.appendChild(boostsDiv);
+  }
+
   document.body.appendChild(panel);
 }
 
@@ -157,7 +185,7 @@ const profiles = [
   { img: 'https://cdn.discordapp.com/avatars/594191661597327375/60f2145c98584eada12ff522e3800fea.png?size=4096', name: 'SenterSych', desc: '"im the goat"' },
   { img: 'https://cdn.discordapp.com/avatars/1119296560468066404/b9e183255ddee74ed8e5dac8b2e146a3.png?size=4096', name: 'Justin', desc: 'Never underestimate the Uchiha' },
   {img: 'https://images-ext-1.discordapp.net/external/mu2O2UUb-4XueO4y3I6MmdvuOdrs2jlUqg0MkzMWQZo/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/529669497938903051/785fa087f01174e6034aca2f4c2152b2.png?format=webp&quality=lossless&width=810&height=810', name: 'DKR', desc: 'Guts is life' },
-  {img: 'https://images-ext-1.discordapp.net/external/_o_S9vh_5KGFF0fnPrFs6pbCF50b0-AvKa8ZlmV2WOc/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1298099597268221965/78146a3983d1889bb209008e9bab5ace.png?format=webp&quality=lossless&width=563&height=563', name: 'Toe Enthusiast', desc: 'I like chicken toes' },
+  {img: 'https://images-ext-1.discordapp.net/external/_o_S9vh_5KGFF0fnPrFs6pbCF50b0-AvKa8ZlmV2WOc/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1298099597268221965/78146a3983d1889bb209008e9bab5ace.png?format=webp&quality=lossless&width=563&height=563', name: 'Chicken Toe Enthusiast', desc: 'I like chicken toes' },
   {img: 'https://images-ext-1.discordapp.net/external/HrS55dJEIwC2FD6YgsLgeW4TzeWOAA7dGfb5xnP8ZMI/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1195914102611120179/68e12f46d4cce9ade42929ef9e9409d4.png?format=webp&quality=lossless&width=223&height=223', name: 'Ball', desc: 'Look at my concepts.' },
   {img: 'https://images-ext-1.discordapp.net/external/Eb9wXrRzZASiq4OIZnVAGrDLDitxxBy8i1-YDhp6r5s/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1322309830308007976/f4a7019e4eab272382652b283df63929.png?format=webp&quality=lossless&width=282&height=282', name: 'MeTa', desc: 'You can’t beat MeTA' },
   {img: 'https://images-ext-1.discordapp.net/external/8epQOkPyrzf2cHXQFvruSRHn60oHMHfT3Tr1t8hyxw0/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/945234689768189983/a_3bf76ed8c109e5d45360ada42e35a5e2.gif?width=953&height=953', name: 'FentDealer', desc: "My name is fentdealer I'm driving a Mercedes benz" },
@@ -166,69 +194,393 @@ const profiles = [
   {img: 'https://images-ext-1.discordapp.net/external/qXmyF4ImLqD-_We6iPtSaXbD7XDvNSSYL6lWK7WQuW8/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/704365516130746458/dbcc7873b4a67e5540864711e0ea7430.png?format=webp&quality=lossless&width=396&height=396', name: 'i am you', desc: 'i hope you feel less motivated after reading this' },
 ];
 
-// --- Config ---
+// --- Rarity Config ---
+
+const rarityColors = {
+  common: "#4eff4e",
+  rare: "#4e9cff",
+  epic: "#b84eff",
+  legendary: "#ffb84e",
+  mythic: "#ff4e9c",
+  secret: "#ff4e4e",
+  divine: "linear-gradient(90deg, #00ffd0, #00bfff)",
+  zephyr: "linear-gradient(90deg, #01AEFD, #0050ff)"
+};
+
+const profileRarityMap = {
+  "Zeph":      { rarity: "zephyr",   buffs: { money: 2, damage: 2, luck: 2 } },
+  "Remote":    { rarity: "divine",   buffs: { money: 1.7, damage: 1.7, luck: 1.7 } },
+  "i am you":  { rarity: "divine",   buffs: { money: 1.7, damage: 1.7, luck: 1.7 } },
+  "Justin":    { rarity: "secret",   buffs: { money: 1.5, damage: 1.5, luck: 1.5 } },
+  "Infuff":    { rarity: "mythic",   buffs: { money: 1.3, damage: 1.3, luck: 1.3 } },
+  "#45 Player":{ rarity: "legendary",buffs: { money: 1.15, damage: 1.15, luck: 1.15 } },
+  "SenterSych":{ rarity: "legendary",buffs: { money: 1.15, damage: 1.15, luck: 1.15 } },
+  "Zoinkys":   { rarity: "epic",     buffs: { money: 1.08, damage: 1.08, luck: 1.08 } },
+  "Ball":      { rarity: "epic",     buffs: { money: 1.08, damage: 1.08, luck: 1.08 } },
+  "Dr. Tempest":{rarity: "rare",     buffs: { money: 1.03, damage: 1.03, luck: 1.03 } },
+  "Qich":      { rarity: "rare",     buffs: { money: 1.03, damage: 1.03, luck: 1.03 } },
+};
+
+profiles.forEach(profile => {
+  const info = profileRarityMap[profile.name];
+  profile.rarity = info ? info.rarity : "common";
+  profile.buffs = info ? info.buffs : { money: 1, damage: 1, luck: 1 };
+});
+
+function recalculateBuffs() {
+  let moneyBuff = 1, damageBuff = 1, luckBuff = 1;
+  unlockedProfiles.forEach(idx => {
+    const buffs = profiles[idx].buffs;
+    moneyBuff *= buffs.money;
+    damageBuff *= buffs.damage;
+    luckBuff *= buffs.luck;
+  });
+  profileMoneyMultiplier = moneyBuff;
+  multiplier = coinsPerClick * moneyBuff;
+  damage = damageBuff;
+  luck = luckBuff;
+}
+
+function getRarityByChance() {
+  let luckMultiplier = luck;
+
+  let roll = Math.random() * 100;
+  roll /= luckMultiplier;
+
+  if (roll < 0.01) return 'secret';
+  if (roll < 1) return 'mythic';
+  if (roll < 6) return 'legendary';
+  if (roll < 26) return 'epic';
+  if (roll < 56) return 'rare';
+  return 'common';
+}
+
+function unlockProfile(idx) {
+  if (!unlockedProfiles.includes(idx)) {
+    unlockedProfiles.push(idx);
+    recalculateBuffs();
+  }
+}
+
+function getRarityByChance() {
+  let luckMultiplier = 1;
+  if (activeProfile && activeProfile.luckDiv) luckMultiplier = activeProfile.luckDiv;
+
+  let roll = Math.random() * 100;
+  roll /= luckMultiplier;
+
+  if (roll < 0.01) return 'secret';
+  if (roll < 1) return 'mythic';
+  if (roll < 6) return 'legendary';
+  if (roll < 26) return 'epic';
+  if (roll < 56) return 'rare';
+  return 'common';
+}
+function getRandomProfileIndex() {
+  let rarity = getRarityByChance();
+
+  let pool = profiles.map((p, i) => ({ ...p, idx: i })).filter(p => p.rarity === rarity);
+
+  if (pool.length === 0) pool = profiles.map((p, i) => ({ ...p, idx: i })).filter(p => p.rarity === 'common');
+  const pick = pool[Math.floor(Math.random() * pool.length)];
+  return pick.idx;
+}
+
+function renderIndexGrid() {
+  const main = document.getElementById('main-section');
+  main.innerHTML = '';
+  main.style.display = 'flex';
+  main.style.flexDirection = 'column';
+  main.style.alignItems = 'center';
+  main.style.justifyContent = 'center';
+
+  if (selectedRarity === 'all') {
+  const rarityOrder = ['zephyr', 'divine', 'secret', 'mythic', 'legendary', 'epic', 'rare', 'common'];
+  const sortedProfiles = profiles.slice().sort((a, b) => {
+    return rarityOrder.indexOf(a.rarity) - rarityOrder.indexOf(b.rarity);
+  });
+
+  const grid = document.createElement('div');
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(6, 1fr)';
+  grid.style.gap = '32px 32px';
+  grid.style.rowGap = '32px';
+  grid.style.padding = '8px 0px';
+  grid.style.width = '100%';
+  grid.style.maxWidth = '900px';
+  grid.style.boxSizing = 'border-box';
+  grid.style.justifyItems = 'center';
+  grid.style.margin = '0 auto';
+
+  sortedProfiles.forEach((profile, idx) => {
+    const cell = document.createElement('div');
+    cell.style.display = 'flex';
+    cell.style.flexDirection = 'column';
+    cell.style.alignItems = 'center';
+    cell.style.justifyContent = 'center';
+    cell.style.margin = '0';
+    cell.style.width = '90px';
+    cell.style.minWidth = '90px';
+    cell.style.boxSizing = 'border-box';
+    const pfp = document.createElement('img');
+    pfp.src = profile.img;
+    pfp.alt = profile.name;
+    pfp.style.width = '160px';
+    pfp.style.height = '160px';
+    pfp.style.borderRadius = '50%';
+    pfp.style.objectFit = 'cover';
+    pfp.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18)';
+    pfp.style.transition = 'box-shadow 0.2s, border 0.2s, filter 0.2s';
+    pfp.style.cursor = unlockedProfiles.includes(profiles.indexOf(profile)) ? 'pointer' : 'not-allowed';
+    pfp.style.background = '#222';
+    pfp.style.filter = unlockedProfiles.includes(profiles.indexOf(profile)) ? '' : 'grayscale(1) brightness(0.5)';
+    pfp.onclick = () => {
+      if (unlockedProfiles.includes(profiles.indexOf(profile))) showProfilePanel(profile);
+    };
+    cell.appendChild(pfp);
+    const name = document.createElement('div');
+    name.textContent = profile.name;
+    name.style.fontFamily = 'Fredoka, sans-serif';
+    name.style.fontSize = '1em';
+    if (rarityColors[profile.rarity] && rarityColors[profile.rarity].includes('gradient')) {
+      name.style.background = rarityColors[profile.rarity];
+      name.style.webkitBackgroundClip = "text";
+      name.style.webkitTextFillColor = "transparent";
+    } else {
+      name.style.color = rarityColors[profile.rarity];
+    }
+    name.style.marginTop = '10px';
+    name.style.textAlign = 'center';
+    cell.appendChild(name);
+    grid.appendChild(cell);
+  });
+  main.appendChild(grid);
+  } else {
+    const group = profiles
+      .map((p, idx) => ({ ...p, idx }))
+      .filter(p => p.rarity === selectedRarity);
+    if (group.length === 0) return;
+    const header = document.createElement('div');
+    header.textContent = selectedRarity.charAt(0).toUpperCase() + selectedRarity.slice(1);
+    header.style.fontFamily = 'Fredoka, sans-serif';
+    header.style.fontWeight = 'bold';
+    header.style.fontSize = '2em';
+    header.style.margin = '32px 0 12px 0';
+    header.style.textAlign = 'center';
+    header.style.background = rarityColors[selectedRarity] && rarityColors[selectedRarity].includes('gradient') ? rarityColors[selectedRarity] : 'none';
+    header.style.color = rarityColors[selectedRarity] && rarityColors[selectedRarity].includes('gradient') ? '#fff' : rarityColors[selectedRarity];
+    if (rarityColors[selectedRarity] && rarityColors[selectedRarity].includes('gradient')) {
+      header.style.background = rarityColors[selectedRarity];
+      header.style.webkitBackgroundClip = "text";
+      header.style.webkitTextFillColor = "transparent";
+    }
+    main.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.style.display = 'grid';
+    grid.style.gridTemplateColumns = 'repeat(6, 1fr)';
+    grid.style.gap = '32px 32px';
+    grid.style.rowGap = '32px';
+    grid.style.padding = '8px 0px';
+    grid.style.width = '100%';
+    grid.style.maxWidth = '900px';
+    grid.style.boxSizing = 'border-box';
+    grid.style.justifyItems = 'center';
+    grid.style.margin = '0 auto';
+
+    group.forEach(profile => {
+      const cell = document.createElement('div');
+      cell.style.display = 'flex';
+      cell.style.flexDirection = 'column';
+      cell.style.alignItems = 'center';
+      cell.style.justifyContent = 'center';
+      cell.style.margin = '0';
+      cell.style.width = '160px';
+      cell.style.minWidth = '160px';
+      cell.style.boxSizing = 'border-box';
+      const pfp = document.createElement('img');
+      pfp.src = profile.img;
+      pfp.alt = profile.name;
+      pfp.style.width = '160px';
+      pfp.style.height = '160px';
+      pfp.style.borderRadius = '50%';
+      pfp.style.objectFit = 'cover';
+      pfp.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18)';
+      pfp.style.transition = 'box-shadow 0.2s, border 0.2s, filter 0.2s';
+      pfp.style.cursor = unlockedProfiles.includes(profile.idx) ? 'pointer' : 'not-allowed';
+      pfp.style.background = '#222';
+      pfp.style.filter = unlockedProfiles.includes(profile.idx) ? '' : 'grayscale(1) brightness(0.5)';
+      pfp.onclick = () => {
+        if (unlockedProfiles.includes(profile.idx)) showProfilePanel(profile);
+      };
+      cell.appendChild(pfp);
+      const name = document.createElement('div');
+      name.textContent = profile.name;
+      name.style.fontFamily = 'Fredoka, sans-serif';
+      name.style.fontSize = '1em';
+      if (rarityColors[profile.rarity] && rarityColors[profile.rarity].includes('gradient')) {
+        name.style.background = rarityColors[profile.rarity];
+        name.style.webkitBackgroundClip = "text";
+        name.style.webkitTextFillColor = "transparent";
+      } else {
+        name.style.color = rarityColors[profile.rarity];
+      }
+      name.style.marginTop = '10px';
+      name.style.textAlign = 'center';
+      cell.appendChild(name);
+      grid.appendChild(cell);
+    });
+    main.appendChild(grid);
+  }
+}
+
+// --- Rarity Sidebar ---
+let selectedRarity = 'all';
+
+function renderRaritySidebar() {
+  let sidebar = document.getElementById('rarity-sidebar');
+  if (!sidebar) {
+    sidebar = document.createElement('div');
+    sidebar.id = 'rarity-sidebar';
+    sidebar.style.position = 'fixed';
+    sidebar.style.right = '0';
+    sidebar.style.top = '0';
+    sidebar.style.width = '180px';
+    sidebar.style.height = '100vh';
+    sidebar.style.background = '#18191c';
+    sidebar.style.zIndex = '100001';
+    sidebar.style.display = 'flex';
+    sidebar.style.flexDirection = 'column';
+    sidebar.style.alignItems = 'center';
+    sidebar.style.paddingTop = '48px';
+    sidebar.style.boxShadow = '-2px 0 16px rgba(0,0,0,0.18)';
+    document.body.appendChild(sidebar);
+  }
+  sidebar.innerHTML = '';
+  const title = document.createElement('div');
+  title.textContent = 'Filter by Rarity';
+  title.style.color = '#fff';
+  title.style.fontFamily = 'Fredoka, sans-serif';
+  title.style.fontWeight = 'bold';
+  title.style.fontSize = '1.2em';
+  title.style.marginBottom = '24px';
+  sidebar.appendChild(title);
+
+  const rarities = ['all', 'zephyr', 'divine', 'secret', 'mythic', 'legendary', 'epic', 'rare', 'common'];
+  rarities.forEach(rarity => {
+    const btn = document.createElement('button');
+    btn.textContent = rarity.charAt(0).toUpperCase() + rarity.slice(1);
+    btn.style.background = selectedRarity === rarity ? '#23272a' : 'transparent';
+
+  if (rarity === 'all') {
+    btn.style.color = '#FFD700';
+  } else if (rarity === 'zephyr') {
+    btn.style.color = '#01AEFD';
+  } else if (rarity === 'divine') {
+    btn.style.color = '#00ffd0';
+  } else if (rarityColors[rarity] && rarityColors[rarity].includes('gradient')) {
+    btn.style.color = '#fff';
+  } else if (rarity === 'common') {
+    btn.style.color = '#4eff4e';
+  } else {
+    btn.style.color = rarityColors[rarity] || '#fff';
+  }
+
+    btn.style.border = 'none';
+    btn.style.fontFamily = 'Fredoka, sans-serif';
+    btn.style.fontSize = '1.1em';
+    btn.style.padding = '12px 0';
+    btn.style.cursor = 'pointer';
+    btn.style.width = '100%';
+    btn.style.transition = 'background 0.2s';
+    btn.onmouseenter = () => btn.style.background = '#111317';
+    btn.onmouseleave = () => btn.style.background = selectedRarity === rarity ? '#23272a' : 'transparent';
+    btn.onclick = () => {
+      selectedRarity = rarity;
+      renderIndexGrid();
+      renderRaritySidebar();
+    };
+    sidebar.appendChild(btn);
+  });
+}
+
+// --- Variables Config ---
 let coins = 0;
 let coinsPerClick = 1;
 let coinsPerSecond = 0;
 let multiplier = 1;
+let damage = 1;
+let luck = 1;
+let profileMoneyMultiplier = 1;
 let unlockedProfiles = [];
 let fasterAuto = false;
+let disableParticles = false;
+let disableSound = false;
+let goldMultiplier = 1;
+let activeProfile = null;
+if (unlockedProfiles.length > 0) {
+  activeProfile = profiles[unlockedProfiles[0]];
+}
+if (activeProfile && activeProfile.multiDiv) goldMultiplier = activeProfile.multiDiv;
+coins += coinsPerClick * goldMultiplier;
+coins += coinsPerSecond * goldMultiplier;
 
-// --- Utility Functions ---
+
+// ---  Number Formatting ---
 function formatCoins(num) {
   if (num < 1_000) return num.toString();
   if (num < 1_000_000) return num.toLocaleString();
   const units = [
-  { value: 1e6, symbol: "M" },
-  { value: 1e9, symbol: "B" },
-  { value: 1e12, symbol: "T" },
-  { value: 1e15, symbol: "Qa" },
-  { value: 1e18, symbol: "Qi" },
-  { value: 1e21, symbol: "Sx" },
-  { value: 1e24, symbol: "Sp" },
-  { value: 1e27, symbol: "Oc" },
-  { value: 1e30, symbol: "No" },
-  { value: 1e33, symbol: "Dc" },
-  { value: 1e36, symbol: "Ud" },
-  { value: 1e39, symbol: "Dd" },
-  { value: 1e42, symbol: "Td" },
-  { value: 1e45, symbol: "Qad" },
-  { value: 1e48, symbol: "Qid" },
-  { value: 1e51, symbol: "Sxd" },
-  { value: 1e54, symbol: "Spd" },
-  { value: 1e57, symbol: "Ocd" },
-  { value: 1e60, symbol: "Nod" },
-  { value: 1e63, symbol: "Vg" },
-  { value: 1e66, symbol: "Uvg" },
-  { value: 1e69, symbol: "Dvg" },
-  { value: 1e72, symbol: "Tvg" },
-  { value: 1e75, symbol: "Qavg" },
-  { value: 1e78, symbol: "Qxvg" },
-  { value: 1e81, symbol: "Sxvg" },
-  { value: 1e84, symbol: "Spvg" },
-  { value: 1e87, symbol: "Ocvg" },
-  { value: 1e90, symbol: "Novg" },
-  { value: 1e93, symbol: "Dcvg" },
-  { value: 1e96, symbol: "Udvg" },
-  { value: 1e99, symbol: "Ddvg" },
-  { value: 1e102, symbol: "Tdvg" },
-  { value: 1e105, symbol: "Qadvg" },
-  { value: 1e108, symbol: "Qidvg" },
-  { value: 1e111, symbol: "Sxdvg" },
-  { value: 1e114, symbol: "Spdvg" },
-  { value: 1e117, symbol: "Ocdvg" },
-  { value: 1e120, symbol: "Nodvg" },
-  { value: 1e123, symbol: "Vgvg" },
-  { value: 1e126, symbol: "Uvgvg" },
-  { value: 1e129, symbol: "Dvgvg" },
-  { value: 1e132, symbol: "Tvgvg" },
-  { value: 1e135, symbol: "Qavgvg" },
-  { value: 1e138, symbol: "Qxvgvg" },
-  { value: 1e141, symbol: "Sxvgvg" },
-  { value: 1e144, symbol: "Spvgvg" },
-  { value: 1e147, symbol: "Ocvgvg" },
-  { value: 1e150, symbol: "Novgvg" },
-  { value: 1e153, symbol: "Dcvgvg" },
+    { value: 1e153, symbol: "Dcvgvg" },
+    { value: 1e150, symbol: "Novgvg" },
+    { value: 1e147, symbol: "Ocvgvg" },
+    { value: 1e144, symbol: "Spvgvg" },
+    { value: 1e141, symbol: "Sxvgvg" },
+    { value: 1e138, symbol: "Qxvgvg" },
+    { value: 1e135, symbol: "Qavgvg" },
+    { value: 1e132, symbol: "Tvgvg" },
+    { value: 1e129, symbol: "Dvgvg" },
+    { value: 1e126, symbol: "Uvgvg" },
+    { value: 1e123, symbol: "Vgvg" },
+    { value: 1e120, symbol: "Nodvg" },
+    { value: 1e117, symbol: "Ocdvg" },
+    { value: 1e114, symbol: "Spdvg" },
+    { value: 1e111, symbol: "Sxdvg" },
+    { value: 1e108, symbol: "Qidvg" },
+    { value: 1e105, symbol: "Qadvg" },
+    { value: 1e102, symbol: "Tdvg" },
+    { value: 1e99, symbol: "Ddvg" },
+    { value: 1e96, symbol: "Udvg" },
+    { value: 1e93, symbol: "Dcvg" },
+    { value: 1e90, symbol: "Novg" },
+    { value: 1e87, symbol: "Ocvg" },
+    { value: 1e84, symbol: "Spvg" },
+    { value: 1e81, symbol: "Sxvg" },
+    { value: 1e78, symbol: "Qxvg" },
+    { value: 1e75, symbol: "Qavg" },
+    { value: 1e72, symbol: "Tvg" },
+    { value: 1e69, symbol: "Dvg" },
+    { value: 1e66, symbol: "Uvg" },
+    { value: 1e63, symbol: "Vg" },
+    { value: 1e60, symbol: "Nod" },
+    { value: 1e57, symbol: "Ocd" },
+    { value: 1e54, symbol: "Spd" },
+    { value: 1e51, symbol: "Sxd" },
+    { value: 1e48, symbol: "Qid" },
+    { value: 1e45, symbol: "Qad" },
+    { value: 1e42, symbol: "Td" },
+    { value: 1e39, symbol: "Dd" },
+    { value: 1e36, symbol: "Ud" },
+    { value: 1e33, symbol: "Dc" },
+    { value: 1e30, symbol: "No" },
+    { value: 1e27, symbol: "Oc" },
+    { value: 1e24, symbol: "Sp" },
+    { value: 1e21, symbol: "Sx" },
+    { value: 1e18, symbol: "Qi" },
+    { value: 1e15, symbol: "Qa" },
+    { value: 1e12, symbol: "T" },
+    { value: 1e9, symbol: "B" },
+    { value: 1e6, symbol: "M" }
   ];
   for (let i = 0; i < units.length; i++) {
     if (num >= units[i].value) {
@@ -240,16 +592,18 @@ function formatCoins(num) {
 
 // --- Particle & Sound Effects ---
 function playSound(type) {
+  if (disableSound) return;
   const sounds = {
-    click: 'https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3',
-    upgrade: 'https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4c7b.mp3',
-    summon: 'https://cdn.pixabay.com/audio/2022/07/26/audio_12b6fa4c7b.mp3'
+    click: '',
+    upgrade: '',
+    summon: ''
   };
   const audio = new Audio(sounds[type]);
   audio.volume = 0.2;
   audio.play();
 }
-function spawnParticles(x, y, color = '#FFD700') {
+function spawnParticles(x, y, color = '#1D1D1D') {
+  if (disableParticles) return;
   for (let i = 0; i < 12; i++) {
     const p = document.createElement('div');
     p.style.position = 'fixed';
@@ -292,7 +646,7 @@ function renderSidebar(selected) {
     document.body.appendChild(sidebar);
   }
   sidebar.innerHTML = '';
-  const sections = ['Workshop','Summon', 'Index'];
+  const sections = ['Workshop','Summon', 'Index', 'Settings'];
   sections.forEach(section => {
     const btn = document.createElement('button');
     btn.textContent = section;
@@ -325,6 +679,75 @@ function renderSidebar(selected) {
   coinDiv.style.marginBottom = '35px';
   coinDiv.style.textAlign = 'center';
   sidebar.appendChild(coinDiv);
+
+  const profileMultiplierDiv = document.createElement('div');
+  profileMultiplierDiv.textContent = `Cash Multiplier: x${profileMoneyMultiplier.toFixed(2)}`;
+  profileMultiplierDiv.style.color = '#ff3b3b';
+  profileMultiplierDiv.style.fontFamily = 'Fredoka, sans-serif';
+  profileMultiplierDiv.style.fontWeight = 'bold';
+  profileMultiplierDiv.style.fontSize = '1.1em';
+  profileMultiplierDiv.style.marginBottom = '4px';
+  profileMultiplierDiv.style.textAlign = 'center';
+  sidebar.appendChild(profileMultiplierDiv);
+
+  const damageDiv = document.createElement('div');
+  damageDiv.textContent = `Damage: x${damage.toFixed(2)}`;
+  damageDiv.style.color = '#9013C5';
+  damageDiv.style.fontFamily = 'Fredoka, sans-serif';
+  damageDiv.style.fontWeight = 'bold';
+  damageDiv.style.fontSize = '1.1em';
+  damageDiv.style.marginBottom = '4px';
+  damageDiv.style.textAlign = 'center';
+  sidebar.appendChild(damageDiv);
+
+  const luckDiv = document.createElement('div');
+  luckDiv.textContent = `Luck: x${luck.toFixed(2)}`;
+  luckDiv.style.color = '#4eff4e';
+  luckDiv.style.fontFamily = 'Fredoka, sans-serif';
+  luckDiv.style.fontWeight = 'bold';
+  luckDiv.style.fontSize = '1.1em';
+  luckDiv.style.marginBottom = '35px';
+  luckDiv.style.textAlign = 'center';
+  sidebar.appendChild(luckDiv);
+}
+
+// --- Settings Toggles ---
+function createSwitch(isOn, onChange) {
+  const wrapper = document.createElement('div');
+  wrapper.style.display = 'flex';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.cursor = 'pointer';
+
+  const track = document.createElement('div');
+  track.style.width = '44px';
+  track.style.height = '24px';
+  track.style.borderRadius = '12px';
+  track.style.background = isOn ? '#01AEFD' : '#444';
+  track.style.transition = 'background 0.2s';
+  track.style.position = 'relative';
+  track.style.marginRight = '12px';
+
+  const knob = document.createElement('div');
+  knob.style.width = '20px';
+  knob.style.height = '20px';
+  knob.style.borderRadius = '50%';
+  knob.style.background = '#fff';
+  knob.style.position = 'absolute';
+  knob.style.top = '2px';
+  knob.style.left = isOn ? '22px' : '2px';
+  knob.style.transition = 'left 0.2s';
+
+  track.appendChild(knob);
+  wrapper.appendChild(track);
+
+  wrapper.onclick = () => {
+    isOn = !isOn;
+    track.style.background = isOn ? '#01AEFD' : '#444';
+    knob.style.left = isOn ? '22px' : '2px';
+    onChange(isOn);
+  };
+
+  return wrapper;
 }
 
 
@@ -341,7 +764,7 @@ let autoClickerCost = 50;
 let doubleClickLevel = 0;
 let doubleClickCost = 150;
 let tripleClickLevel = 0;
-let tripleClickCost = 1000;
+let tripleClickCost = 100000;
 
 function getAutoClickerGain(level) {
   if (level < 10) return 10;
@@ -351,32 +774,36 @@ function getAutoClickerGain(level) {
   return 1000000000;
 }
 
+
+let shopSidebar = null;
+
 function renderShopSidebar(section) {
-  let shop = document.getElementById('shop-sidebar');
-  if (!shop) {
-    shop = document.createElement('div');
-    shop.id = 'shop-sidebar';
-    shop.style.position = 'fixed';
-    shop.style.right = '0';
-    shop.style.top = '0';
-    shop.style.width = '320px';
-    shop.style.height = '100vh';
-    shop.style.background = '#18191c';
-    shop.style.zIndex = '100001';
-    shop.style.display = 'flex';
-    shop.style.flexDirection = 'column';
-    shop.style.alignItems = 'stretch';
-    shop.style.paddingTop = '48px';
-    shop.style.boxShadow = '-2px 0 16px rgba(0,0,0,0.18)';
-    shop.style.overflowY = 'auto';
-    document.body.appendChild(shop);
+  if (!shopSidebar) {
+    shopSidebar = document.createElement('div');
+    shopSidebar.id = 'shop-sidebar';
+    shopSidebar.style.position = 'fixed';
+    shopSidebar.style.right = '0';
+    shopSidebar.style.top = '0';
+    shopSidebar.style.width = '320px';
+    shopSidebar.style.height = '100vh';
+    shopSidebar.style.background = '#18191c';
+    shopSidebar.style.zIndex = '100001';
+    shopSidebar.style.display = 'flex';
+    shopSidebar.style.flexDirection = 'column';
+    shopSidebar.style.alignItems = 'stretch';
+    shopSidebar.style.paddingTop = '48px';
+    shopSidebar.style.boxShadow = '-2px 0 16px rgba(0,0,0,0.18)';
+    shopSidebar.style.overflowY = 'auto';
+    document.body.appendChild(shopSidebar);
   }
-  shop.innerHTML = '';
+
   if (section !== 'Workshop') {
-    shop.style.display = 'none';
-    return;
+    shopSidebar.style.display = 'none';
+  } else {
+    shopSidebar.style.display = 'flex';
   }
-  shop.style.display = 'flex';
+
+  shopSidebar.innerHTML = '';
 
   const pageSelector = document.createElement('div');
   pageSelector.style.display = 'flex';
@@ -424,7 +851,7 @@ function renderShopSidebar(section) {
   pageSelector.appendChild(leftArrow);
   pageSelector.appendChild(pageTitle);
   pageSelector.appendChild(rightArrow);
-  shop.appendChild(pageSelector);
+  shopSidebar.appendChild(pageSelector);
 
   if (shopPages[shopPage] === 'Permanent') {
     const autoClickerCard = document.createElement('div');
@@ -473,9 +900,6 @@ function renderShopSidebar(section) {
         autoClickerCost = Math.round(autoClickerCost * 1.7);
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
-        updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
         startAutoCoins();
       }
     };
@@ -492,14 +916,11 @@ function renderShopSidebar(section) {
       if (bought > 0) {
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
-        updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
         startAutoCoins();
       }
     };
     autoClickerCard.appendChild(autoBtn);
-    shop.appendChild(autoClickerCard);
+    shopSidebar.appendChild(autoClickerCard);
 
     const doubleClickCard = document.createElement('div');
     doubleClickCard.style.background = '#23272a';
@@ -545,12 +966,10 @@ function renderShopSidebar(section) {
         doubleClickLevel++;
         coinsPerClick *= 2;
         multiplier = coinsPerClick;
-        doubleClickCost = Math.round(doubleClickCost * 2.5);
+        doubleClickCost = Math.round(doubleClickCost * getClickUpgradeMultiplier(doubleClickLevel));
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
       }
     };
     doubleBtn.oncontextmenu = (e) => {
@@ -561,19 +980,17 @@ function renderShopSidebar(section) {
         doubleClickLevel++;
         coinsPerClick *= 2;
         multiplier = coinsPerClick;
-        doubleClickCost = Math.round(doubleClickCost * 2);
+        doubleClickCost = Math.round(doubleClickCost * getClickUpgradeMultiplier(doubleClickLevel));
         bought++;
       }
       if (bought > 0) {
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
       }
     };
     doubleClickCard.appendChild(doubleBtn);
-    shop.appendChild(doubleClickCard);
+    shopSidebar.appendChild(doubleClickCard);
 
     const tripleClickCard = document.createElement('div');
     tripleClickCard.style.background = '#23272a';
@@ -619,12 +1036,10 @@ function renderShopSidebar(section) {
         tripleClickLevel++;
         coinsPerClick = Math.round(coinsPerClick * 3);
         multiplier = coinsPerClick;
-        tripleClickCost = Math.round(tripleClickCost * 2.5);
+        tripleClickCost = Math.round(tripleClickCost * getClickUpgradeMultiplier(tripleClickLevel));
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
       }
     };
     tripleBtn.oncontextmenu = (e) => {
@@ -635,19 +1050,17 @@ function renderShopSidebar(section) {
         tripleClickLevel++;
         coinsPerClick = Math.round(coinsPerClick * 3);
         multiplier = coinsPerClick;
-        tripleClickCost = Math.round(tripleClickCost * 2.5);
+        tripleClickCost = Math.round(tripleClickCost * getClickUpgradeMultiplier(tripleClickLevel));
         bought++;
       }
       if (bought > 0) {
         playSound('upgrade');
         spawnParticles(e.clientX, e.clientY, '#01AEFD');
         updateWorkshopUI();
-        renderSidebar('Workshop');
-        renderShopSidebar('Workshop');
       }
     };
     tripleClickCard.appendChild(tripleBtn);
-    shop.appendChild(tripleClickCard);
+    shopSidebar.appendChild(tripleClickCard);
 
   } else if (shopPages[shopPage] === 'Upgrades') {
     if (!purchasedUpgrades["Golden Cursor"]) {
@@ -698,12 +1111,10 @@ function renderShopSidebar(section) {
           playSound('upgrade');
           spawnParticles(e.clientX, e.clientY, '#01AEFD');
           updateWorkshopUI();
-          renderSidebar('Workshop');
-          renderShopSidebar('Workshop');
         }
       };
       goldenCard.appendChild(btn);
-      shop.appendChild(goldenCard);
+      shopSidebar.appendChild(goldenCard);
     }
 
     if (!purchasedUpgrades["Mega Magnet"]) {
@@ -753,12 +1164,10 @@ function renderShopSidebar(section) {
           playSound('upgrade');
           spawnParticles(e.clientX, e.clientY, '#01AEFD');
           updateWorkshopUI();
-          renderSidebar('Workshop');
-          renderShopSidebar('Workshop');
         }
       };
       magnetCard.appendChild(btn);
-      shop.appendChild(magnetCard);
+      shopSidebar.appendChild(magnetCard);
     }
 
     if (!purchasedUpgrades["Faster Auto"]) {
@@ -788,7 +1197,7 @@ function renderShopSidebar(section) {
       fasterCard.appendChild(desc);
 
       const btn = document.createElement('button');
-      btn.textContent = `Buy ($500)`;
+      btn.textContent = `Buy ($100K)`;
       btn.style.background = '#01AEFD';
       btn.style.color = '#fff';
       btn.style.border = 'none';
@@ -808,13 +1217,11 @@ function renderShopSidebar(section) {
           playSound('upgrade');
           spawnParticles(e.clientX, e.clientY, '#01AEFD');
           updateWorkshopUI();
-          renderSidebar('Workshop');
-          renderShopSidebar('Workshop');
           startAutoCoins();
         }
       };
       fasterCard.appendChild(btn);
-      shop.appendChild(fasterCard);
+      shopSidebar.appendChild(fasterCard);
     }
   } else if (shopPages[shopPage] === 'Boosts') {
     const empty = document.createElement('div');
@@ -824,21 +1231,29 @@ function renderShopSidebar(section) {
     empty.style.fontSize = '1.1em';
     empty.style.margin = '32px 0 0 0';
     empty.style.textAlign = 'center';
-    shop.appendChild(empty);
+    shopSidebar.appendChild(empty);
   }
 }
 
+
 // --- Main Section ---
 
+let lastClickTime = 0;
+const minClickInterval = 100; 
+
 function renderSection(section) {
+  const raritySidebar = document.getElementById('rarity-sidebar');
+
+  if (raritySidebar && section !== 'Index') {
+    raritySidebar.remove();
+  }
+
   let main = document.getElementById('main-section');
   if (!main) {
     main = document.createElement('div');
     main.id = 'main-section';
     main.style.position = 'fixed';
-    main.style.left = '180px';
     main.style.top = '0';
-    main.style.width = 'calc(100vw - 180px - 260px)';
     main.style.height = '100vh';
     main.style.background = 'transparent';
     main.style.zIndex = '100000';
@@ -846,7 +1261,10 @@ function renderSection(section) {
     document.body.appendChild(main);
   }
   main.innerHTML = '';
+
   if (section === 'Workshop') {
+    main.style.left = '180px';
+    main.style.width = 'calc(100vw - 180px - 320px)';
     main.style.overflow = 'hidden';
     const workshopDiv = document.createElement('div');
     workshopDiv.style.display = 'flex';
@@ -905,67 +1323,28 @@ function renderSection(section) {
     clickBtn.onmouseenter = () => clickBtn.style.background = '#0170b6';
     clickBtn.onmouseleave = () => clickBtn.style.background = '#01AEFD';
     clickBtn.onclick = (e) => {
+      const now = Date.now();
+      if (now - lastClickTime < minClickInterval) {
+        return;
+      }
+      lastClickTime = now;
       coins += multiplier;
       playSound('click');
       spawnParticles(e.clientX, e.clientY, '#FFD700');
       updateWorkshopUI();
-      renderSidebar('Workshop');
-      renderShopSidebar('Workshop');
     };
     workshopDiv.appendChild(clickBtn);
 
     main.appendChild(workshopDiv);
-  }
-  else if (section === 'Index') {
+  } else if (section === 'Index') {
+    main.style.left = '180px';
+    main.style.width = 'calc(100vw - 180px)';
     main.style.overflow = 'auto';
-    const grid = document.createElement('div');
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(6, 1fr)';
-    grid.style.gap = '0px 0px';
-    grid.style.rowGap = '32px';
-    grid.style.padding = '48px 0 0 0';
-    grid.style.width = '100%';
-    grid.style.maxWidth = '100vw';
-    grid.style.boxSizing = 'border-box';
-    grid.style.justifyItems = 'center';
-    profiles.forEach((profile, idx) => {
-      const cell = document.createElement('div');
-      cell.style.display = 'flex';
-      cell.style.flexDirection = 'column';
-      cell.style.alignItems = 'center';
-      cell.style.justifyContent = 'center';
-      cell.style.margin = '0';
-      cell.style.width = '90px';
-      cell.style.minWidth = '90px';
-      cell.style.boxSizing = 'border-box';
-      const pfp = document.createElement('img');
-      pfp.src = profile.img;
-      pfp.alt = profile.name;
-      pfp.style.width = '160px';
-      pfp.style.height = '160px';
-      pfp.style.borderRadius = '50%';
-      pfp.style.objectFit = 'cover';
-      pfp.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18)';
-      pfp.style.transition = 'box-shadow 0.2s, border 0.2s, filter 0.2s';
-      pfp.style.cursor = unlockedProfiles.includes(idx) ? 'pointer' : 'not-allowed';
-      pfp.style.background = '#222';
-      pfp.style.filter = unlockedProfiles.includes(idx) ? '' : 'grayscale(1) brightness(0.5)';
-      pfp.onclick = () => {
-        if (unlockedProfiles.includes(idx)) showProfilePanel(profile);
-      };
-      cell.appendChild(pfp);
-      const name = document.createElement('div');
-      name.textContent = profile.name;
-      name.style.fontFamily = 'Fredoka, sans-serif';
-      name.style.fontSize = '1em';
-      name.style.color = unlockedProfiles.includes(idx) ? '#fff' : '#888';
-      name.style.marginTop = '10px';
-      name.style.textAlign = 'center';
-      cell.appendChild(name);
-      grid.appendChild(cell);
-    });
-    main.appendChild(grid);
+    renderRaritySidebar();
+    renderIndexGrid();
   } else if (section === 'Summon') {
+    main.style.left = '180px';
+    main.style.width = 'calc(100vw - 180px)';
     main.style.overflow = 'hidden';
     const summonDiv = document.createElement('div');
     summonDiv.style.display = 'flex';
@@ -1003,7 +1382,7 @@ function renderSection(section) {
     }
 
     function summon(times) {
-      let cost = times === 1 ? 500 : 4000;
+      let cost = times === 1 ? 100000 : 1000000;
       if (coins < cost) {
         showError('Not enough coins');
         return;
@@ -1011,13 +1390,18 @@ function renderSection(section) {
       coins -= cost;
       let results = [];
       for (let i = 0; i < times; i++) {
-        let idx = Math.floor(Math.random() * profiles.length);
-        if (!unlockedProfiles.includes(idx)) {
-          unlockedProfiles.push(idx);
-          results.push({ ...profiles[idx], duplicate: false });
+        let rarity = getRarityByChance();
+        const summonableRarities = ['secret', 'mythic', 'legendary', 'epic', 'rare', 'common'];
+        if (!summonableRarities.includes(rarity)) rarity = 'common';
+        let pool = profiles.map((p, idx) => ({ ...p, idx })).filter(p => p.rarity === rarity);
+        if (pool.length === 0) pool = profiles.map((p, idx) => ({ ...p, idx })).filter(p => p.rarity === 'common');
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        if (!unlockedProfiles.includes(pick.idx)) {
+          unlockProfile(pick.idx);
+          results.push({ ...pick, duplicate: false });
         } else {
           coins += 250;
-          results.push({ ...profiles[idx], duplicate: true });
+          results.push({ ...pick, duplicate: true });
         }
       }
       renderSidebar('Summon');
@@ -1038,8 +1422,8 @@ function renderSection(section) {
     summon1.onclick = () => summon(1);
 
     const summon10 = document.createElement('button');
-    summon10.textContent = 'Summon 10x (4000 coins)';
-    summon10.style.fontSize = '1.1em'; 
+    summon10.textContent = 'Summon 10x (1M coins)';
+    summon10.style.fontSize = '1.1em';
     summon10.style.fontFamily = 'Fredoka, sans-serif';
     summon10.style.padding = '12px 32px';
     summon10.style.background = '#015AFD';
@@ -1049,14 +1433,139 @@ function renderSection(section) {
     summon10.style.cursor = 'pointer';
     summon10.onclick = () => summon(10);
 
+    const ratesBtn = document.createElement('button');
+    ratesBtn.textContent = 'Rates';
+    ratesBtn.style.fontSize = '1.1em';
+    ratesBtn.style.fontFamily = 'Fredoka, sans-serif';
+    ratesBtn.style.padding = '12px 32px';
+    ratesBtn.style.background = '#23272a';
+    ratesBtn.style.color = '#fff';
+    ratesBtn.style.border = 'none';
+    ratesBtn.style.borderRadius = '12px';
+    ratesBtn.style.cursor = 'pointer';
+    ratesBtn.onclick = () => {
+      const rates = [
+        { name: 'Secret', rate: '0.01', color: rarityColors.secret },
+        { name: 'Mythic', rate: '1', color: rarityColors.mythic },
+        { name: 'Legendary', rate: '5', color: rarityColors.legendary },
+        { name: 'Epic', rate: '20', color: rarityColors.epic },
+        { name: 'Rare', rate: '30', color: rarityColors.rare },
+        { name: 'Common', rate: '44', color: rarityColors.common }
+      ];
+      let html = '';
+      rates.forEach(r => {
+        if (r.color && r.color.includes('gradient')) {
+          html += `<div style="font-family:Fredoka,sans-serif;font-size:1.2em;margin-bottom:8px;background:${r.color};-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${r.name} = ${r.rate}%</div>`;
+        } else {
+          html += `<div style="font-family:Fredoka,sans-serif;font-size:1.2em;margin-bottom:8px;color:${r.color};">${r.name} = ${r.rate}%</div>`;
+        }
+      });
+      showPopup('Summon Rates:<br><br>' + html, "OK");
+    };
+
     btnRow.appendChild(summon1);
     btnRow.appendChild(summon10);
+    btnRow.appendChild(ratesBtn);
     summonDiv.appendChild(btnRow);
     summonDiv.appendChild(errorMsg);
 
     main.appendChild(summonDiv);
+  } else if (section === 'Settings') {
+    main.style.left = '180px';
+    main.style.width = 'calc(100vw - 180px)';
+    main.style.overflow = 'auto';
+    main.style.display = 'flex';
+    main.style.flexDirection = 'column';
+    main.style.alignItems = 'center';
+    main.style.justifyContent = 'center';
+    main.style.paddingTop = '80px';
+
+    const header = document.createElement('div');
+    header.textContent = 'Settings';
+    header.style.fontFamily = 'Fredoka, sans-serif';
+    header.style.fontWeight = 'bold';
+    header.style.fontSize = '2em';
+    header.style.marginBottom = '40px';
+    header.style.color = '#01AEFD';
+    header.style.textAlign = 'center';
+    main.appendChild(header);
+
+    const particlesToggle = document.createElement('div');
+    particlesToggle.style.display = 'flex';
+    particlesToggle.style.alignItems = 'center';
+    particlesToggle.style.fontFamily = 'Fredoka, sans-serif';
+    particlesToggle.style.fontSize = '1.1em';
+    particlesToggle.style.marginBottom = '18px';
+    particlesToggle.style.color = '#01AEFD';
+    particlesToggle.appendChild(createSwitch(disableParticles, (on) => {
+      disableParticles = on;
+      saveGame();
+    }));
+    particlesToggle.appendChild(document.createTextNode('Disable Particles'));
+    main.appendChild(particlesToggle);
+
+    const soundToggle = document.createElement('div');
+    soundToggle.style.display = 'flex';
+    soundToggle.style.alignItems = 'center';
+    soundToggle.style.fontFamily = 'Fredoka, sans-serif';
+    soundToggle.style.fontSize = '1.1em';
+    soundToggle.style.marginBottom = '18px';
+    soundToggle.style.color = '#01AEFD';
+    soundToggle.appendChild(createSwitch(disableSound, (on) => {
+      disableSound = on;
+      saveGame();
+    }));
+    soundToggle.appendChild(document.createTextNode('Disable Sound Effects'));
+    main.appendChild(soundToggle);
+
+    const resetBtn = document.createElement('button');
+    resetBtn.textContent = 'Reset Progress';
+    resetBtn.style.background = '#ff4e4e';
+    resetBtn.style.color = '#fff';
+    resetBtn.style.border = 'none';
+    resetBtn.style.borderRadius = '8px';
+    resetBtn.style.padding = '12px 32px';
+    resetBtn.style.fontFamily = 'Fredoka, sans-serif';
+    resetBtn.style.fontSize = '1.1em';
+    resetBtn.style.cursor = 'pointer';
+    resetBtn.style.marginTop = '32px';
+    resetBtn.onclick = () => {
+      showPopup(
+        'Are you sure you want to reset all progress? This cannot be undone.',
+        'Reset',
+        'Cancel',
+        () => {
+          coins = 0;
+          coinsPerClick = 1;
+          coinsPerSecond = 0;
+          multiplier = 1;
+          unlockedProfiles = [];
+          fasterAuto = false;
+          purchasedUpgrades = {
+            "Golden Cursor": false,
+            "Mega Magnet": false,
+            "Faster Auto": false
+          };
+          autoClickerLevel = 0;
+          autoClickerCost = 50;
+          doubleClickLevel = 0;
+          doubleClickCost = 150;
+          tripleClickLevel = 0;
+          tripleClickCost = 1000;
+          disableParticles = false;
+          disableSound = false;
+          localStorage.removeItem('jumpstars_save');
+          saveGame();
+          location.reload();
+        }
+      );
+    };
+    main.appendChild(resetBtn);
   }
 }
+
+
+
 
 // --- UI Helper ---
 function updateWorkshopUI() {
@@ -1068,6 +1577,86 @@ function updateWorkshopUI() {
   if (cpsDiv) cpsDiv.textContent = `Coins per Second: ${formatCoins(coinsPerSecond)}`;
 }
 
+// --- Popup ---
+function showPopup(message, confirmText = "OK", cancelText = null, onConfirm = null, onCancel = null) {
+  const old = document.getElementById('custom-popup-overlay');
+  if (old) old.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'custom-popup-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100vw';
+  overlay.style.height = '100vh';
+  overlay.style.background = 'rgba(0,0,0,0.6)';
+  overlay.style.zIndex = '100010';
+  overlay.style.display = 'flex';
+  overlay.style.justifyContent = 'center';
+  overlay.style.alignItems = 'center';
+
+  const box = document.createElement('div');
+  box.style.background = '#232323';
+  box.style.borderRadius = '18px';
+  box.style.padding = '36px 32px 28px 32px';
+  box.style.display = 'flex';
+  box.style.flexDirection = 'column';
+  box.style.alignItems = 'center';
+  box.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
+  box.style.fontFamily = 'Fredoka, sans-serif';
+  box.style.minWidth = '320px';
+
+  const msg = document.createElement('div');
+  msg.innerHTML = message;
+  msg.style.fontSize = '1.2em';
+  msg.style.color = '#fff';
+  msg.style.marginBottom = '24px';
+  msg.style.textAlign = 'center';
+  box.appendChild(msg);
+
+  const btnRow = document.createElement('div');
+  btnRow.style.display = 'flex';
+  btnRow.style.gap = '18px';
+
+  const okBtn = document.createElement('button');
+  okBtn.textContent = confirmText;
+  okBtn.style.background = '#01AEFD';
+  okBtn.style.color = '#fff';
+  okBtn.style.border = 'none';
+  okBtn.style.borderRadius = '8px';
+  okBtn.style.padding = '10px 28px';
+  okBtn.style.fontFamily = 'Fredoka, sans-serif';
+  okBtn.style.fontSize = '1.1em';
+  okBtn.style.cursor = 'pointer';
+  okBtn.onclick = () => {
+    overlay.remove();
+    if (onConfirm) onConfirm();
+  };
+  btnRow.appendChild(okBtn);
+
+  if (cancelText) {
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = cancelText;
+    cancelBtn.style.background = '#444';
+    cancelBtn.style.color = '#fff';
+    cancelBtn.style.border = 'none';
+    cancelBtn.style.borderRadius = '8px';
+    cancelBtn.style.padding = '10px 28px';
+    cancelBtn.style.fontFamily = 'Fredoka, sans-serif';
+    cancelBtn.style.fontSize = '1.1em';
+    cancelBtn.style.cursor = 'pointer';
+    cancelBtn.onclick = () => {
+      overlay.remove();
+      if (onCancel) onCancel();
+    };
+    btnRow.appendChild(cancelBtn);
+  }
+
+  box.appendChild(btnRow);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
 // --- Auto Coin Gain ---
 let autoInterval = null;
 function startAutoCoins() {
@@ -1076,21 +1665,17 @@ function startAutoCoins() {
     if (coinsPerSecond > 0) {
       coins += coinsPerSecond;
       updateWorkshopUI();
-      renderSidebar('Workshop');
-      renderShopSidebar('Workshop');
     }
-  }, fasterAuto ? 1000 : 2000);
+  }, fasterAuto ? 500 : 1000);
 }
 startAutoCoins();
 
-setInterval(() => {
-  if (fasterAuto && autoInterval && autoInterval._idleTimeout !== 1000) startAutoCoins();
-}, 500);
+// --- Click Upgrade Multiplier
 
-createRepeatingTextBackground();
-renderSidebar('Workshop');
-renderSection('Workshop');
-renderShopSidebar('Workshop');
+function getClickUpgradeMultiplier(level) {
+  const decade = Math.floor((level - 1) / 10);
+  return 2.5 * Math.pow(50, decade);
+}
 
 function showSummonResults(results) {
   const overlay = document.createElement('div');
@@ -1144,12 +1729,19 @@ function showSummonResults(results) {
     pfp.style.background = '#222';
     pfp.style.marginBottom = '8px';
     cell.appendChild(pfp);
-    const name = document.createElement('div');
-    name.textContent = res.name;
-    name.style.fontFamily = 'Fredoka, sans-serif';
-    name.style.fontSize = '1em';
-    name.style.color = '#fff';
-    name.style.textAlign = 'center';
+const name = document.createElement('div');
+name.textContent = res.name;
+name.style.fontFamily = 'Fredoka, sans-serif';
+name.style.fontSize = '1em';
+if (rarityColors[res.rarity] && rarityColors[res.rarity].includes('gradient')) {
+  name.style.background = rarityColors[res.rarity];
+  name.style.webkitBackgroundClip = "text";
+  name.style.webkitTextFillColor = "transparent";
+} else {
+  name.style.color = rarityColors[res.rarity] || '#fff';
+}
+name.style.textAlign = 'center';
+cell.appendChild(name);
     cell.appendChild(name);
     if (res.duplicate) {
       const dup = document.createElement('div');
@@ -1179,6 +1771,85 @@ function showSummonResults(results) {
   document.body.appendChild(overlay);
 }
 
-createRepeatingTextBackground();
+// --- Save System ---
+
+function saveGame() {
+const saveData = {
+  coins,
+  coinsPerClick,
+  coinsPerSecond,
+  multiplier,
+  unlockedProfiles,
+  fasterAuto,
+  purchasedUpgrades,
+  autoClickerLevel,
+  autoClickerCost,
+  doubleClickLevel,
+  doubleClickCost,
+  tripleClickLevel,
+  tripleClickCost,
+  activeProfileIndex: activeProfile ? activeProfile.idx : null
+};
+  localStorage.setItem('jumpstars_save', JSON.stringify(saveData));
+}
+
+function loadGame() {
+  const data = localStorage.getItem('jumpstars_save');
+  if (!data) return;
+  try {
+    const save = JSON.parse(data);
+    coins = save.coins ?? coins;
+    coinsPerClick = save.coinsPerClick ?? coinsPerClick;
+    coinsPerSecond = save.coinsPerSecond ?? coinsPerSecond;
+    multiplier = save.multiplier ?? multiplier;
+    unlockedProfiles = save.unlockedProfiles ?? unlockedProfiles;
+    fasterAuto = save.fasterAuto ?? fasterAuto;
+    purchasedUpgrades = save.purchasedUpgrades ?? purchasedUpgrades;
+    autoClickerLevel = save.autoClickerLevel ?? autoClickerLevel;
+    autoClickerCost = save.autoClickerCost ?? autoClickerCost;
+    doubleClickLevel = save.doubleClickLevel ?? doubleClickLevel;
+    doubleClickCost = save.doubleClickCost ?? doubleClickCost;
+    tripleClickLevel = save.tripleClickLevel ?? tripleClickLevel;
+    tripleClickCost = save.tripleClickCost ?? tripleClickCost;
+    activeProfile = null;
+    if (typeof save.activeProfileIndex === 'number' && unlockedProfiles.includes(save.activeProfileIndex)) {
+      activeProfile = profiles[save.activeProfileIndex];
+    }
+
+    const DEFAULT_AUTO_CLICKER_COST = 50;
+    const DEFAULT_DOUBLE_CLICK_COST = 150;
+    const DEFAULT_TRIPLE_CLICK_COST = 1000000;
+    const DEFAULT_SUMMON_COST = 100000;
+    const DEFAULT_SUMMON10_COST = 1000000;
+
+    if (typeof autoClickerCost === "undefined" || autoClickerCost < DEFAULT_AUTO_CLICKER_COST) {
+      autoClickerCost = DEFAULT_AUTO_CLICKER_COST;
+    }
+    if (typeof doubleClickCost === "undefined" || doubleClickCost < DEFAULT_DOUBLE_CLICK_COST) {
+      doubleClickCost = DEFAULT_DOUBLE_CLICK_COST;
+    }
+    if (typeof tripleClickCost === "undefined" || tripleClickCost < DEFAULT_TRIPLE_CLICK_COST) {
+      tripleClickCost = DEFAULT_TRIPLE_CLICK_COST;
+    }
+
+    if (typeof window.summonCost !== "undefined" && window.summonCost < DEFAULT_SUMMON_COST) {
+      window.summonCost = DEFAULT_SUMMON_COST;
+    }
+    if (typeof window.summon10Cost !== "undefined" && window.summon10Cost < DEFAULT_SUMMON10_COST) {
+      window.summon10Cost = DEFAULT_SUMMON10_COST;
+    }
+
+  } catch (e) {
+    console.error("Failed to load save:", e);
+  }
+}
+
+setInterval(saveGame, 10000);
+window.addEventListener('beforeunload', saveGame);
+
+loadGame();
+updateWorkshopUI();
 renderSidebar('Workshop');
+renderShopSidebar('Workshop');
 renderSection('Workshop');
+createRepeatingTextBackground();
