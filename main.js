@@ -1400,7 +1400,7 @@ function renderSection(section) {
           unlockProfile(pick.idx);
           results.push({ ...pick, duplicate: false });
         } else {
-          coins += 250;
+          coins += 25000;
           results.push({ ...pick, duplicate: true });
         }
       }
